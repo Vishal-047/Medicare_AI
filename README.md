@@ -1,8 +1,9 @@
 This is a Next.js project bootstrapped with create-next-app.
 
 Getting Started
-First, run the development server:
-
+First:
+npm install
+then, run development server:
 npm run dev
 # or
 yarn dev
