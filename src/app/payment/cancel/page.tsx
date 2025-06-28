@@ -1,4 +1,4 @@
-// app/payment/cancel/page.tsx
+
 import React from 'react';
 import { XCircle } from 'lucide-react';
 import Link from 'next/link';
