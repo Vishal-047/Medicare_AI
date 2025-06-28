@@ -169,7 +169,7 @@ const Home = () => {
     },
     {
       icon: <Brain className="w-8 h-8 text-purple-600" />,
-      title: "AI Medical Reeport Analysis",
+      title: "AI Medical Report Analysis",
       description:
         "Get intelligent health insights and preliminary assessments",
       path: "/ai-analysis",

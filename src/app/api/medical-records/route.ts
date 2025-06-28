@@ -19,9 +19,8 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
-    // Return the records sorted by most recent first
-    const sortedHistory = (user.medicalHistory || []).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-    const sortedDocuments = (user.documents || []).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    const sortedHistory = (user.medicalHistory || []).sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    const sortedDocuments = (user.documents || []).sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     return NextResponse.json({ medicalHistory: sortedHistory, documents: sortedDocuments })
   } catch (error) {

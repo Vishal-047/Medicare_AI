@@ -36,6 +36,9 @@ import { useSession } from "next-auth/react"
 import AuthModal from "@/components/AuthModal"
 import { Poppins, Inter } from "next/font/google"
 import FileUpload from "@/components/FileUpload"
+import { toast } from "sonner"
+import { Loader2 } from "lucide-react"
+import { loadStripe } from "@stripe/stripe-js"
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -78,6 +81,21 @@ interface IDocument {
   url: string
 }
 
+type Bill = {
+  id: number
+  date: string
+  provider: string
+  service: string
+  amount: number
+  insurance: number
+  balance: number
+  status: string
+}
+
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""
+)
+
 const MedicalRecords = () => {
   const [medicalHistory, setMedicalHistory] = useState<MedicalRecord[]>([])
   const [documents, setDocuments] = useState<IDocument[]>([])
@@ -86,6 +104,16 @@ const MedicalRecords = () => {
   const { data: session, status } = useSession()
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
+  const [isAddRecordOpen, setIsAddRecordOpen] = useState(false)
+  const [addRecordLoading, setAddRecordLoading] = useState(false)
+  const [addRecordError, setAddRecordError] = useState<string | null>(null)
+  const [addRecordSuccess, setAddRecordSuccess] = useState<string | null>(null)
+  const [recordFile, setRecordFile] = useState<File | null>(null)
+  const [recordDiagnosis, setRecordDiagnosis] = useState("")
+  const [recordDoctor, setRecordDoctor] = useState("")
+  const [recordType, setRecordType] = useState("")
+  const [recordStatus, setRecordStatus] = useState("")
+  const [payingBillId, setPayingBillId] = useState<number | null>(null)
 
   const bills = [
     {
@@ -201,6 +229,87 @@ const MedicalRecords = () => {
     )
   }).length
 
+  const handleAddRecord = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setAddRecordError(null)
+    setAddRecordSuccess(null)
+    if (!recordFile) {
+      setAddRecordError("Please select a report file to upload.")
+      return
+    }
+    setAddRecordLoading(true)
+    try {
+      const formData = new FormData()
+      formData.append("file", recordFile)
+      formData.append(
+        "recordData",
+        JSON.stringify({
+          diagnosis: recordDiagnosis,
+          doctor: recordDoctor,
+          type: recordType,
+          status: recordStatus,
+        })
+      )
+      const response = await fetch("/api/medical-records", {
+        method: "POST",
+        body: formData,
+      })
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || "Failed to add record")
+      }
+      setAddRecordSuccess("Record added successfully!")
+      setIsAddRecordOpen(false)
+      setRecordFile(null)
+      setRecordDiagnosis("")
+      setRecordDoctor("")
+      setRecordType("")
+      setRecordStatus("")
+      fetchRecords()
+    } catch (error: any) {
+      setAddRecordError(error.message || "Failed to add record.")
+    } finally {
+      setAddRecordLoading(false)
+    }
+  }
+
+  const handleCheckout = async (bill: Bill) => {
+    setPayingBillId(bill.id)
+    try {
+      const response = await fetch("/api/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          service: bill.service,
+          provider: bill.provider,
+          balance: bill.balance,
+        }),
+      })
+
+      if (!response.ok) {
+        const errorBody = await response.json()
+        throw new Error(errorBody.error || "Failed to create payment session.")
+      }
+
+      const { session } = await response.json()
+      const stripe = await stripePromise
+      if (!stripe) {
+        throw new Error("Stripe.js has not loaded yet.")
+      }
+      const { error } = await stripe.redirectToCheckout({
+        sessionId: session.id,
+      })
+
+      if (error) {
+        toast.error(error.message || "An error occurred during redirection.")
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Could not initiate payment.")
+    } finally {
+      setPayingBillId(null)
+    }
+  }
+
   return (
     <div
       className={`min-h-screen relative ${inter.variable} ${poppins.variable} bg-background dark:bg-[#181A1B]`}
@@ -291,7 +400,11 @@ const MedicalRecords = () => {
                   <div className="text-xs mb-4">
                     Upload a report or add an entry.
                   </div>
-                  <Button className="w-full bg-white text-black font-semibold mt-2 flex items-center justify-center gap-2 border border-black shadow transition-all duration-200 hover:bg-gray-100 hover:border-black hover:shadow-lg cursor-pointer">
+                  <Button
+                    className="w-full bg-white text-black font-semibold mt-2 flex items-center justify-center gap-2 border border-black shadow transition-all duration-200 hover:bg-gray-100 hover:border-black hover:shadow-lg cursor-pointer"
+                    onClick={() => setIsAddRecordOpen(true)}
+                    disabled={status !== "authenticated"}
+                  >
                     Add Record <Plus className="w-4 h-4" />
                   </Button>
                 </div>
@@ -315,7 +428,7 @@ const MedicalRecords = () => {
               </div>
               <div className="flex gap-2">
                 <FileUpload
-                  onFiles={(files: File[]) => {
+                  onUploadSuccess={(files: File[]) => {
                     // TODO: handle file upload logic here, e.g., upload to server and update documents
                     // Example: setDocuments(prevDocs => [...files, ...prevDocs])
                   }}
@@ -564,9 +677,17 @@ const MedicalRecords = () => {
                           <Button
                             size="sm"
                             className="w-full font-inter font-normal"
+                            onClick={() => handleCheckout(bill)}
+                            disabled={payingBillId === bill.id}
                           >
-                            <DollarSign className="w-4 h-4 mr-2" />
-                            Pay Now
+                            {payingBillId === bill.id ? (
+                              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                            ) : (
+                              <DollarSign className="w-4 h-4 mr-2" />
+                            )}
+                            {payingBillId === bill.id
+                              ? "Redirecting..."
+                              : "Pay Now"}
                           </Button>
                         )}
                       </div>
@@ -660,6 +781,80 @@ const MedicalRecords = () => {
         </div>
       </div>
       <AuthModal isOpen={isAuthModalOpen} setIsOpen={setIsAuthModalOpen} />
+      <Dialog open={isAddRecordOpen} onOpenChange={setIsAddRecordOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Add New Medical Record</DialogTitle>
+            <DialogDescription>
+              Upload a report and enter details for your medical record.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleAddRecord} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                Report File <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="file"
+                accept=".pdf,.jpg,.jpeg,.png"
+                onChange={(e) => setRecordFile(e.target.files?.[0] || null)}
+                className="block w-full border border-border rounded px-2 py-1"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                Diagnosis
+              </label>
+              <Input
+                value={recordDiagnosis}
+                onChange={(e) => setRecordDiagnosis(e.target.value)}
+                placeholder="e.g. Diabetes Mellitus"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Doctor</label>
+              <Input
+                value={recordDoctor}
+                onChange={(e) => setRecordDoctor(e.target.value)}
+                placeholder="e.g. Dr. Smith"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Type</label>
+              <Input
+                value={recordType}
+                onChange={(e) => setRecordType(e.target.value)}
+                placeholder="e.g. Lab Report, Prescription"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Status</label>
+              <Input
+                value={recordStatus}
+                onChange={(e) => setRecordStatus(e.target.value)}
+                placeholder="e.g. Completed, Active"
+              />
+            </div>
+            {addRecordError && (
+              <p className="text-red-500 text-sm">{addRecordError}</p>
+            )}
+            <div className="flex justify-end gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsAddRecordOpen(false)}
+                disabled={addRecordLoading}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" disabled={addRecordLoading}>
+                {addRecordLoading ? "Uploading..." : "Add Record"}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
