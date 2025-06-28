@@ -47,7 +47,8 @@ async function sendEmail({ to, subject, html }: EmailOptions) {
 function getEmailContent(
   doctorName: string,
   status: "approved" | "rejected",
-  doctorId?: string
+  doctorId?: string,
+  doctorEmail?: string
 ) {
   if (status === "approved") {
     return {
@@ -58,8 +59,12 @@ function getEmailContent(
           <p>Dear Dr. ${doctorName},</p>
           <p>We are thrilled to inform you that your application to join our network of trusted healthcare professionals has been <strong>approved</strong>.</p>
           <p>Your profile is now live and you can start connecting with patients.</p>
-          <a href="${process.env.NEXT_PUBLIC_APP_URL}/doctor/${doctorId}" style="display: inline-block; background-color: #3498db; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin-top: 20px;">
-            Go to Your Dashboard
+          <a href="${
+            process.env.NEXT_PUBLIC_APP_URL
+          }/doctor/onboarding?email=${encodeURIComponent(
+        doctorEmail || ""
+      )}" style="display: inline-block; background-color: #3498db; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin-top: 20px;">
+            Continue to your dashboard
           </a>
           <p style="margin-top: 30px; font-size: 0.9em; color: #7f8c8d;">Thank you for joining us in our mission to make healthcare more accessible.</p>
           <p style="font-size: 0.9em; color: #7f8c8d;">Best regards,<br/>The Medicare AI Team</p>
@@ -89,6 +94,18 @@ export async function sendApplicationStatusEmail(
   status: "approved" | "rejected",
   doctorId?: string
 ) {
-  const { subject, html } = getEmailContent(doctorName, status, doctorId)
+  // Find the application to get the email for the onboarding link
+  let doctorEmail = to
+  if (status === "approved") {
+    // Try to get the application email if possible
+    // (Assume to is the email, but you can adjust if needed)
+    doctorEmail = to
+  }
+  const { subject, html } = getEmailContent(
+    doctorName,
+    status,
+    doctorId,
+    doctorEmail
+  )
   await sendEmail({ to, subject, html })
 }

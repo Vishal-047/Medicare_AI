@@ -35,9 +35,16 @@ export async function POST(req: Request) {
       )
       .join("\n")
 
+    // Get today's date in YYYY-MM-DD format
+    const today = new Date()
+    const yyyy = today.getFullYear()
+    const mm = String(today.getMonth() + 1).padStart(2, "0")
+    const dd = String(today.getDate()).padStart(2, "0")
+    const formattedDate = `${yyyy}-${mm}-${dd}`
+
     const prompt = `You are an experienced medical doctor. Based on the following conversation with the patient, write a formal medical prescription in ${languageName}. The prescription should include:
 - Patient name, age, gender (if available)
-- Date
+- Date: ${formattedDate}
 - Diagnosis/Assessment
 - Medications (with dosage, frequency, and duration)
 - Advice/Instructions
