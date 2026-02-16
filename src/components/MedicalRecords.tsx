@@ -1,30 +1,21 @@
-import { NextResponse } from 'next/server';
-import fs from 'fs/promises';
-import path from 'path';
+"use client"
 
-export async function GET(request: Request, { params }: { params: { filename: string } }) {
-  const { filename } = params;
-  const filePath = path.join(process.cwd(), 'uploads', filename);
+import React from "react"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
-  try {
-    const fileBuffer = await fs.readFile(filePath);
-    return new NextResponse(fileBuffer, {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/pdf', // Change if not PDF
-        'Content-Disposition': `inline; filename="${filename}"`, // 'inline' to view in browser
-      },
-    });
-  } catch (_error) {
-    return new NextResponse('File not found', { status: 404 });
-  }
+interface MedicalRecordButtonProps {
+  filename: string
 }
 
-<a
-  href={`/api/documents/${record.filename}`}
-  target="_blank"
-  rel="noopener noreferrer"
-  style={{ textDecoration: 'none' }}
->
-  <button>View Original Report</button>
-</a>
+export default function MedicalRecords({ filename }: MedicalRecordButtonProps) {
+  return (
+    <Link
+      href={`/api/documents/${filename}`}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <Button variant="outline">View Original Report</Button>
+    </Link>
+  )
+}

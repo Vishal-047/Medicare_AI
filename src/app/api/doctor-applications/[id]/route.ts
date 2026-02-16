@@ -7,7 +7,7 @@ import bcrypt from "bcrypt"
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await connectDB()
   const { id } = await params
@@ -78,7 +78,6 @@ export async function PUT(
       { status: 200 }
     )
   } catch (error) {
-    // @ts-expect-error
     return NextResponse.json(
       // @ts-expect-error
       { message: "Internal Server Error", error: error?.message },

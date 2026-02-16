@@ -17,11 +17,12 @@ import { connectDB } from "@/lib/db"
 export default async function DoctorDashboardPage({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
   await connectDB()
+  const { id } = await params
   // Fetch doctor by ID
-  const doctor = await User.findById(params.id).lean()
+  const doctor = await User.findById(id).lean()
   if (!doctor || doctor.role !== "doctor") {
     return notFound()
   }

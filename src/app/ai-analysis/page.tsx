@@ -120,9 +120,8 @@ export default function AIReportAnalyzer() {
         setError(null)
         setAnalysisResult(null)
       } else {
-        toast("Unsupported File Type", {
+        toast.error("Unsupported File Type", {
           description: "Please upload an image or a PDF file.",
-          variant: "destructive",
         })
       }
     }
@@ -190,7 +189,7 @@ export default function AIReportAnalyzer() {
     if (saveOnlyOriginal) {
       recordData.diagnosis = file.name || "Uploaded Report"
     } else {
-      recordData.diagnosis = `AI Analysis: ${analysisResult.keyFindings[0]?.label || "Report"
+      recordData.diagnosis = `AI Analysis: ${analysisResult?.keyFindings[0]?.label || "Report"
         }`
       recordData.analysis = analysisResult
     }
@@ -218,10 +217,13 @@ export default function AIReportAnalyzer() {
 
       // Update the analysis result to include the correct URL
       if (savedRecord.originalReportUrl) {
-        setAnalysisResult((prev) => ({
-          ...prev!,
-          originalReportUrl: savedRecord.originalReportUrl,
-        }))
+        setAnalysisResult((prev) => {
+          if (!prev) return null
+          return {
+            ...prev,
+            originalReportUrl: savedRecord.originalReportUrl,
+          }
+        })
       }
 
       toast("Record Saved!", {
@@ -230,9 +232,8 @@ export default function AIReportAnalyzer() {
           : "The AI analysis has been added to your medical history.",
       })
     } catch (error) {
-      toast("Error", {
+      toast.error("Error", {
         description: "Could not save the record. Please try again.",
-        variant: "destructive",
       })
     } finally {
       setIsSaving(false)
@@ -272,8 +273,8 @@ export default function AIReportAnalyzer() {
               <div
                 {...getRootProps()}
                 className={`relative border-2 border-dashed rounded-lg p-12 text-center transition-colors duration-200 ease-in-out ${isDragActive
-                    ? "border-blue-500 bg-blue-50 dark:bg-blue-900/10"
-                    : "border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600"
+                  ? "border-blue-500 bg-blue-50 dark:bg-blue-900/10"
+                  : "border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600"
                   }`}
               >
                 <input {...getInputProps()} />

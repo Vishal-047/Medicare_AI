@@ -1,10 +1,15 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
-export default async function PatientDetailPage({ params }: { params: { id: string } }) {
+export default async function PatientDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
+  const { id } = await params
   // In a real app, you would fetch patient data based on the id
   const patient = {
-    id: params.id,
+    id: id,
     name: "John Doe",
     age: 45,
     gender: "Male",

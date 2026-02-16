@@ -1,4 +1,4 @@
-import { Schema, model, models, Document } from "mongoose"
+import { Schema, model, models, Document, Model } from "mongoose"
 
 export interface IMedicalRecord extends Document {
   type: string
@@ -125,6 +125,6 @@ const userSchema = new Schema<IUser>(
 
 userSchema.index({ location: "2dsphere" })
 
-const User = models.User || model<IUser>("User", userSchema)
+const User = (models.User as Model<IUser>) || model<IUser>("User", userSchema)
 
 export default User
