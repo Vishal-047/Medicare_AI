@@ -18,11 +18,11 @@ export default function PrivacyPolicy() {
       {/* Header */}
       <header className="bg-blue-700 py-8 px-4 text-white text-center">
         <h1 className="text-4xl font-bold mb-2">Privacy Policy</h1>
-        <p className="text-lg">
-          To learn more about Privacy at Medicare-AI please visit our {" "}
-          <Link href="/privacy-hub" className="underline font-semibold hover:text-blue-200">Privacy Hub</Link>.
+        <p className="text-lg max-w-3xl mx-auto">
+          This Privacy Policy explains how <span className="font-semibold">Medicare-AI</span> collects, uses, and protects your
+          personal and health information when you use our website, mobile experience, and AI-powered services.
         </p>
-        <p className="italic text-sm mt-2">Effective Date: January 1, 2024</p>
+        <p className="italic text-sm mt-2">Effective Date: January 1, 2025</p>
       </header>
 
       {/* Main Layout */}
@@ -31,23 +31,50 @@ export default function PrivacyPolicy() {
         <main className="flex-1 min-w-0">
           {/* Optional summary message section */}
           <div className="mb-8 p-4 bg-blue-50 border-l-4 border-blue-400 rounded">
-            <p className="text-blue-900 text-base">At Medicare-AI, your privacy is our top priority. We are committed to protecting your personal and health information while providing you with seamless access to healthcare services, doctor appointments, and government health schemes.</p>
+            <p className="text-blue-900 text-base">
+              At Medicare-AI, your privacy is our top priority. We only collect the minimum information required
+              to provide safe, secure and useful healthcare assistance. We do <span className="font-semibold">not</span> sell your
+              data, and we use industry-standard security controls to protect it.
+            </p>
           </div>
 
           <section id="introduction" className="mb-10 scroll-mt-24">
             <h2 className="text-2xl font-semibold mb-2">Introduction</h2>
-            <p className="text-gray-700">Medicare-AI values your privacy and is dedicated to safeguarding your personal and health-related information. This Privacy Policy outlines how we collect, use, share, and protect your data when you use our platform to find doctors, book appointments, and access government health schemes. By using Medicare-AI, you agree to the practices described in this policy.</p>
+            <p className="text-gray-700">
+              Medicare-AI values your privacy and is dedicated to safeguarding your personal and health-related information.
+              This Privacy Policy describes what data we collect, how and why we process it, with whom we may share it,
+              and the choices you have. By accessing or using Medicare-AI, you agree to the practices described here.
+            </p>
           </section>
 
           <section id="data-we-collect" className="mb-10 scroll-mt-24">
             <h2 className="text-2xl font-semibold mb-2">Data We Collect</h2>
             <ul className="list-disc pl-6 text-gray-700">
-              <li><span className="font-medium">Personal Information:</span> Name, date of birth, gender, contact details (email, phone), and address.</li>
-              <li><span className="font-medium">Medical History:</span> Health conditions, medications, allergies, previous appointments, and uploaded medical documents.</li>
-              <li><span className="font-medium">Appointment Details:</span> Booked doctor appointments, schedules, and related notes.</li>
-              <li><span className="font-medium">Usage Data:</span> Log data, device information, browser type, IP address, and interactions with our platform.</li>
-              <li><span className="font-medium">Cookies & Tracking:</span> We use cookies and similar technologies to enhance your experience. See our {" "}
-                <Link href="/cookie-policy" className="text-blue-600 hover:underline">Cookie Policy</Link> for details.
+              <li>
+                <span className="font-medium">Account & Identity Data:</span> Name, date of birth, gender, contact details
+                (email, phone), and address you provide when creating or updating your account.
+              </li>
+              <li>
+                <span className="font-medium">Health & Medical Information:</span> Symptoms you enter into the AI assistant,
+                health conditions, medications, allergies, past consultations, uploaded medical reports, lab results,
+                prescriptions and any notes you choose to store.
+              </li>
+              <li>
+                <span className="font-medium">Appointment & Provider Data:</span> Booked doctor appointments, schedules,
+                providers you interact with, and related status updates.
+              </li>
+              <li>
+                <span className="font-medium">Technical & Usage Data:</span> Log data, device information, browser type,
+                IP address, approximate location, pages visited, and interactions with our platform and AI services.
+              </li>
+              <li>
+                <span className="font-medium">Payment Data:</span> Limited billing-related details (such as masked card details or
+                transaction IDs) processed via secure payment gateways like Stripe. Full card data is handled directly
+                by the payment provider and not stored by us.
+              </li>
+              <li>
+                <span className="font-medium">Cookies & Tracking:</span> We use cookies and similar technologies to remember
+                your preferences, secure your sessions, and improve performance.
               </li>
             </ul>
           </section>
@@ -55,47 +82,82 @@ export default function PrivacyPolicy() {
           <section id="how-we-use-your-data" className="mb-10 scroll-mt-24">
             <h2 className="text-2xl font-semibold mb-2">How We Use Your Data</h2>
             <ul className="list-disc pl-6 text-gray-700">
-              <li>To book and manage doctor appointments and healthcare services.</li>
-              <li>To provide access to government health schemes and related information.</li>
-              <li>To personalize your experience and recommend relevant healthcare providers or services.</li>
-              <li>To communicate with you about appointments, updates, and support.</li>
-              <li>To improve our platform, conduct analytics, and ensure security.</li>
+              <li>To provide core features such as AI-based symptom checks, report analysis, doctor discovery and appointment booking.</li>
+              <li>To personalise your experience and show relevant doctors, health articles, reminders and schemes based on your profile.</li>
+              <li>To process payments for any paid plans or services and send related confirmations or invoices.</li>
+              <li>To communicate with you about account activity, appointments, lab results, security alerts and product updates.</li>
+              <li>To monitor system performance, detect fraud or abuse, enforce our Terms of Service, and keep the platform secure.</li>
+              <li>To generate anonymised or aggregated statistics that help us understand how the platform is used and improve it.</li>
             </ul>
           </section>
 
           <section id="how-we-share-information" className="mb-10 scroll-mt-24">
             <h2 className="text-2xl font-semibold mb-2">How We Share Information</h2>
             <ul className="list-disc pl-6 text-gray-700">
-              <li>With doctors and healthcare providers for appointment management and care delivery.</li>
-              <li>With government health services and partners, as required to provide you with relevant schemes and benefits.</li>
-              <li>With trusted third-party service providers who assist us in operating our platform, under strict confidentiality agreements.</li>
-              <li>With your consent, as required by law, or to protect the rights and safety of users and the public.</li>
-              <li>We do not sell your personal information to third parties.</li>
+              <li>
+                With doctors and healthcare providers involved in your care, only to the extent necessary to schedule or manage appointments
+                or share records you explicitly choose to share.
+              </li>
+              <li>
+                With trusted third-party vendors (such as hosting, analytics, SMS/email, payment processors and AI model providers) who
+                process data on our behalf under strict contractual obligations.
+              </li>
+              <li>
+                With government health programs or insurers where you ask us to help you check eligibility or benefits, subject to applicable law.
+              </li>
+              <li>
+                With regulators, law enforcement, or other parties when required by law, legal process, or to protect the safety, rights,
+                or property of you, us, or others.
+              </li>
+              <li>
+                We <span className="font-semibold">do not sell</span> your personal information to third parties.
+              </li>
             </ul>
           </section>
 
           <section id="your-choices-obligations" className="mb-10 scroll-mt-24">
-            <h2 className="text-2xl font-semibold mb-2">Your Choices & Obligations</h2>
+            <h2 className="text-2xl font-semibold mb-2">Your Choices & Rights</h2>
             <ul className="list-disc pl-6 text-gray-700">
-              <li>You may access, update, or delete your account and personal information at any time through your profile settings.</li>
-              <li>You may opt out of certain communications or data uses by adjusting your preferences or contacting us.</li>
-              <li>You are responsible for maintaining the accuracy of your information and for keeping your login credentials secure.</li>
+              <li>You may access, update, or delete certain personal information at any time through your account settings.</li>
+              <li>You may opt out of marketing communications by using the unsubscribe link in our emails or by contacting us.</li>
+              <li>You can request that we delete your account, subject to legal or regulatory retention requirements.</li>
+              <li>You are responsible for keeping your login credentials confidential and for promptly notifying us of any suspected misuse.</li>
             </ul>
           </section>
 
           <section id="other-important-info" className="mb-10 scroll-mt-24">
             <h2 className="text-2xl font-semibold mb-2">Other Important Information</h2>
             <ul className="list-disc pl-6 text-gray-700">
-              <li><span className="font-medium">Data Security:</span> We use industry-standard security measures to protect your data, including encryption and secure storage. However, no system is completely secure.</li>
-              <li><span className="font-medium">Children's Privacy:</span> Medicare-AI is not intended for children under 16. We do not knowingly collect data from children. If you believe a child has provided us with information, please contact us.</li>
-              <li><span className="font-medium">Data Retention:</span> We retain your data as long as your account is active or as needed to provide services and comply with legal obligations.</li>
-              <li><span className="font-medium">Contact for Privacy Inquiries:</span> If you have questions or requests regarding your privacy, please contact us at <a href="mailto:privacy@medicare-ai.com" className="text-blue-600 hover:underline">privacy@medicare-ai.com</a> or +91-123-456-7890.</li>
+              <li>
+                <span className="font-medium">Data Security:</span> We use encryption, access controls, and secure infrastructure to
+                protect your information. However, no method of transmission or storage is 100% secure.
+              </li>
+              <li>
+                <span className="font-medium">Children's Privacy:</span> Medicare-AI is not intended for children under 16. We do not
+                knowingly collect data from children. If you believe a child has provided us with information, please contact us so we can delete it.
+              </li>
+              <li>
+                <span className="font-medium">Data Retention:</span> We retain your data for as long as your account is active or as
+                needed to provide services and comply with legal obligations, resolve disputes, and enforce our agreements.
+              </li>
+              <li>
+                <span className="font-medium">Contact for Privacy Inquiries:</span> If you have questions or requests regarding your
+                privacy, please contact us at{" "}
+                <a href="mailto:privacy@medicare-ai.com" className="text-blue-600 hover:underline">
+                  privacy@medicare-ai.com
+                </a>{" "}
+                or +91-123-456-7890.
+              </li>
             </ul>
           </section>
 
           <section id="changes-to-policy" className="mb-10 scroll-mt-24">
             <h2 className="text-2xl font-semibold mb-2">Changes to This Policy</h2>
-            <p className="text-gray-700">We may update this Privacy Policy from time to time. We will notify you of significant changes by posting the new policy on this page. Please review this policy periodically.</p>
+            <p className="text-gray-700">
+              We may update this Privacy Policy from time to time to reflect changes in our practices, technology or legal
+              requirements. When we make material changes, we will update the &quot;Effective Date&quot; above and, where
+              appropriate, notify you through the product or by email. Please review this policy periodically.
+            </p>
           </section>
         </main>
 
