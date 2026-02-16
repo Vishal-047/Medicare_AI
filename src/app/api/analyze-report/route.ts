@@ -137,6 +137,7 @@ export async function POST(req: NextRequest) {
     const analysis = JSON.parse(cleanedJson)
 
     return NextResponse.json(analysis)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error("Error analyzing report:", error)
     return NextResponse.json(

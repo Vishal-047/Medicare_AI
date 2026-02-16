@@ -34,7 +34,7 @@ export default function AdminLoginPage() {
           setError(res.error)
         }
       }
-    } catch (err) {
+    } catch (_err) {
       setError("Unknown error. Please try again.")
     } finally {
       setIsLoading(false)
@@ -55,7 +55,7 @@ export default function AdminLoginPage() {
       } else {
         router.replace("/admin")
       }
-    } catch (err) {
+    } catch (_err) {
       setError("Unknown error. Please try again.")
     } finally {
       setIsLoading(false)

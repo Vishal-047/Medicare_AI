@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react";
-import { MessageCircle, Facebook, Instagram, Linkedin, Twitter, Youtube, Mail, Phone, FileText, HeartPulse, Stethoscope, ShieldCheck, Hospital, FilePlus } from "lucide-react";
+import { MessageCircle, Facebook, Instagram, Linkedin, Twitter, Youtube, Mail, Phone } from "lucide-react";
 import Link from "next/link";
 
 const features = [
@@ -33,7 +33,7 @@ export default function ContactUs() {
         <p className="text-lg mb-6">Sign in so we can get you the right help and support.</p>
         <div className="flex flex-col items-center gap-2">
           <button className="bg-white text-blue-700 font-semibold px-8 py-2 rounded shadow hover:bg-blue-50 transition mb-1">Sign in</button>
-          <Link href="#" className="underline text-sm hover:text-blue-200">Can't sign in</Link>
+          <Link href="#" className="underline text-sm hover:text-blue-200">Can&apos;t sign in</Link>
         </div>
       </div>
 

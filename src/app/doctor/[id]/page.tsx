@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table"
 import Link from "next/link"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { ArrowUpRight, DollarSign, Users, Star } from "lucide-react"
+import { DollarSign, Users, Star } from "lucide-react"
 import { notFound } from "next/navigation"
 import User from "@/models/User"
 import { connectDB } from "@/lib/db"

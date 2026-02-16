@@ -116,6 +116,7 @@ export const authOptions: AuthOptions = {
       }
       return token
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async session({ session, token }: { session: any; token: JWT }) {
       if (token && session.user) {
         session.user.id = token.id as string

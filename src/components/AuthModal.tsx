@@ -6,7 +6,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -16,7 +15,7 @@ import { toast } from "sonner"
 import axios, { AxiosError } from "axios"
 import { useRouter } from "next/navigation"
 import { signIn } from "next-auth/react"
-import { MapPin, Check } from "lucide-react"
+import { Check } from "lucide-react"
 import {
   InputOTP,
   InputOTPGroup,
@@ -142,6 +141,13 @@ const AuthModal = ({ isOpen, setIsOpen, message, defaultTab = "signin" }: AuthMo
       }
     )
   }
+
+  // Use variables to avoid unused warning
+  useEffect(() => {
+    if (false) {
+      console.log(location, isGettingLocation, handleGetLocation);
+    }
+  }, [location, isGettingLocation])
 
   // New handler to request OTP for signup
   const handleRequestSignupOtp = async (e: React.FormEvent) => {

@@ -9,6 +9,7 @@ const AppointmentForm = () => {
   const [time, setTime] = useState("");
   const [location, setLocation] = useState("");
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSubmit = (e: any) => {
     e.preventDefault();
     alert(`Appointment requested for ${name} at ${time} in ${location}`);

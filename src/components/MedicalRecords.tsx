@@ -15,7 +15,7 @@ export async function GET(request: Request, { params }: { params: { filename: st
         'Content-Disposition': `inline; filename="${filename}"`, // 'inline' to view in browser
       },
     });
-  } catch (error) {
+  } catch (_error) {
     return new NextResponse('File not found', { status: 404 });
   }
 }

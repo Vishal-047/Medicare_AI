@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { useState } from "react";
 
 interface FileUploadProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onUploadSuccess: (newDocument: any) => void;
 }
 
@@ -34,10 +35,11 @@ export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
         const errorData = await response.json();
         throw new Error(errorData.error || "Upload failed");
       }
-      
+
       const newDocument = await response.json();
       toast.success("File uploaded successfully!");
       onUploadSuccess(newDocument);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error("Upload error:", error);
       toast.error(error.message || "An unexpected error occurred.");
@@ -81,11 +83,10 @@ export function GridPattern() {
           return (
             <div
               key={`${col}-${row}`}
-              className={`w-10 h-10 flex shrink-0 rounded-[2px] ${
-                index % 2 === 0
+              className={`w-10 h-10 flex shrink-0 rounded-[2px] ${index % 2 === 0
                   ? "bg-gray-50 dark:bg-neutral-950"
                   : "bg-gray-50 dark:bg-neutral-950 shadow-[0px_0px_1px_3px_rgba(255,255,255,1)_inset] dark:shadow-[0px_0px_1px_3px_rgba(0,0,0,1)_inset]"
-              }`}
+                }`}
             />
           )
         })

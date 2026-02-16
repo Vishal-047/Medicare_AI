@@ -33,6 +33,7 @@ interface MedicalEvent {
   patient_id: string;
   timestamp: string;
   event_type: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   event_data: any;
 }
 
@@ -81,7 +82,7 @@ function PatientDashboard() {
         setPatient(mainPatient);
 
         const patientEvents = jsonData.medical_events.filter((e: MedicalEvent) => e.patient_id === 'PAT001');
-        
+
         setLatestMetrics({
           'Blood_Pressure': getLatestMetric(patientEvents, 'Blood_Pressure'),
           'Blood_Sugar': getLatestMetric(patientEvents, 'Blood_Sugar'),
@@ -92,9 +93,11 @@ function PatientDashboard() {
 
         const medEvents = patientEvents
           .filter((e: MedicalEvent) => e.event_type === 'Medication_Taken')
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           .sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
         setLatestMedStatus(medEvents.length > 0 ? medEvents[0] : null);
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const sortedEvents = patientEvents.sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
         setActivityLog(sortedEvents.slice(0, 5));
         setLoading(false);
@@ -228,73 +231,73 @@ export default function HealthMonitoring() {
       <main className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         {/* Section 1: Patient Monitoring Dashboard */}
         <div className="text-center mb-12">
-            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">Patient Monitoring Dashboard</h1>
-            <p className="mt-4 text-lg text-slate-600 dark:text-slate-400">
-                Real-time overview of patient PAT001.
-            </p>
+          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">Patient Monitoring Dashboard</h1>
+          <p className="mt-4 text-lg text-slate-600 dark:text-slate-400">
+            Real-time overview of patient PAT001.
+          </p>
         </div>
-        
+
         <PatientDashboard />
 
         <div className="border-t border-slate-200 dark:border-slate-700 my-16"></div>
-        
+
         {/* Section 2: Manual Health Metric Logging */}
         <div className="text-center mb-12">
-            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">Health Monitoring</h1>
-            <p className="mt-4 text-lg text-slate-600 dark:text-slate-400">
-                Log your daily metrics to track your health over time.
-            </p>
+          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">Health Monitoring</h1>
+          <p className="mt-4 text-lg text-slate-600 dark:text-slate-400">
+            Log your daily metrics to track your health over time.
+          </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            <div className="md:col-span-1">
-                <form onSubmit={handleSubmit} className="space-y-4 p-6 bg-card rounded-lg shadow">
-                {METRICS.map((metric) => (
-                    <div key={metric.key}>
-                    <label className="block font-medium mb-1 text-sm">{metric.label}</label>
-                    <input
-                        type={metric.type}
-                        name={metric.key}
-                        value={form[metric.key]}
-                        onChange={handleChange}
-                        className="w-full border rounded px-3 py-2 bg-input text-foreground"
-                        required
-                        step="any"
-                    />
-                    </div>
-                ))}
-                <button
-                    type="submit"
-                    className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold py-2 rounded-md transition-colors"
-                >
-                    Add New Entry
-                </button>
-                </form>
-            </div>
-            <div className="md:col-span-2">
-                {insight && (
-                <div className="mb-6 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 rounded-r-lg">
-                    <p className="font-bold">AI Insight</p>
-                    <p>{insight}</p>
+          <div className="md:col-span-1">
+            <form onSubmit={handleSubmit} className="space-y-4 p-6 bg-card rounded-lg shadow">
+              {METRICS.map((metric) => (
+                <div key={metric.key}>
+                  <label className="block font-medium mb-1 text-sm">{metric.label}</label>
+                  <input
+                    type={metric.type}
+                    name={metric.key}
+                    value={form[metric.key]}
+                    onChange={handleChange}
+                    className="w-full border rounded px-3 py-2 bg-input text-foreground"
+                    required
+                    step="any"
+                  />
                 </div>
-                )}
-                 {data.length === 0 && !insight && (
-                    <div className="text-center p-8 bg-card rounded-lg shadow">
-                        <p className="text-muted-foreground">Your charts will appear here once you add your first health entry.</p>
-                    </div>
-                )}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {METRICS.map((metric) => (
-                    <div key={metric.key} className="p-4 bg-card rounded-lg shadow">
-                        <HealthChart
-                            chartId={metric.key}
-                            title={metric.label}
-                            labels={chartLabels}
-                            data={data.map((d) => Number(d[metric.key]) || 0)}
-                        />
-                    </div>
-                ))}
+              ))}
+              <button
+                type="submit"
+                className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold py-2 rounded-md transition-colors"
+              >
+                Add New Entry
+              </button>
+            </form>
+          </div>
+          <div className="md:col-span-2">
+            {insight && (
+              <div className="mb-6 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 rounded-r-lg">
+                <p className="font-bold">AI Insight</p>
+                <p>{insight}</p>
+              </div>
+            )}
+            {data.length === 0 && !insight && (
+              <div className="text-center p-8 bg-card rounded-lg shadow">
+                <p className="text-muted-foreground">Your charts will appear here once you add your first health entry.</p>
+              </div>
+            )}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {METRICS.map((metric) => (
+                <div key={metric.key} className="p-4 bg-card rounded-lg shadow">
+                  <HealthChart
+                    chartId={metric.key}
+                    title={metric.label}
+                    labels={chartLabels}
+                    data={data.map((d) => Number(d[metric.key]) || 0)}
+                  />
                 </div>
+              ))}
             </div>
+          </div>
         </div>
 
       </main>

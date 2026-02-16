@@ -96,6 +96,7 @@ const TestimonialScroller = ({
   testimonials,
   duration = "30s",
 }: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   testimonials: any[]
   duration?: string
 }) => {

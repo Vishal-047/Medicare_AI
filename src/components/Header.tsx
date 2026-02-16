@@ -8,7 +8,7 @@ import AuthModal from "./AuthModal"
 
 const Header = () => {
   const navigate = useRouter()
-  const { data: session, status } = useSession()
+  const { status } = useSession()
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   const [authModalTab, setAuthModalTab] = useState<'signin' | 'signup'>('signin')
   const [showRecordsMessage, setShowRecordsMessage] = useState(false)

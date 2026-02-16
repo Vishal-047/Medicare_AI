@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData()
     console.log("[API] Parsed form data")
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const applicationData: { [key: string]: any } = {}
     const fileFields = [
       "mbbsCertificate",
@@ -90,7 +91,7 @@ export async function POST(req: NextRequest) {
     )
   } catch (error) {
     console.error("[API] Doctor application error:", error)
-    // @ts-ignore
+    // @ts-expect-error
     if (error.code === 11000) {
       return NextResponse.json(
         {
@@ -101,7 +102,7 @@ export async function POST(req: NextRequest) {
       )
     }
     return NextResponse.json(
-      // @ts-ignore
+      // @ts-expect-error
       { message: "Internal Server Error", error: error?.message },
       { status: 500 }
     )
@@ -118,7 +119,7 @@ export async function GET() {
   } catch (error) {
     console.error("[API] Doctor application GET error:", error)
     return NextResponse.json(
-      // @ts-ignore
+      // @ts-expect-error
       { message: "Internal Server Error", error: error?.message },
       { status: 500 }
     )

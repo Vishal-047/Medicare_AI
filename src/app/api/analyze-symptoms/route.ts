@@ -58,6 +58,7 @@ Your next message as the doctor:`
     const analysis = await response.text()
 
     return NextResponse.json({ analysis })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error(error)
     if (error?.message?.includes("429")) {

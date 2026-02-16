@@ -44,32 +44,32 @@ export default async function PatientDetailPage({ params }: { params: { id: stri
         </Card>
 
         <div className="lg:col-span-2 space-y-8">
-            <Card className="bg-white dark:bg-slate-900">
-                <CardHeader><CardTitle className="text-slate-900 dark:text-slate-50">Medical History</CardTitle></CardHeader>
-                <CardContent>
-                    <p className="text-slate-700 dark:text-slate-300">{patient.medicalHistory}</p>
-                </CardContent>
-            </Card>
+          <Card className="bg-white dark:bg-slate-900">
+            <CardHeader><CardTitle className="text-slate-900 dark:text-slate-50">Medical History</CardTitle></CardHeader>
+            <CardContent>
+              <p className="text-slate-700 dark:text-slate-300">{patient.medicalHistory}</p>
+            </CardContent>
+          </Card>
 
-            <Card className="bg-white dark:bg-slate-900">
-                <CardHeader><CardTitle className="text-slate-900 dark:text-slate-50">Recent Appointments</CardTitle></CardHeader>
-                <CardContent>
-                    <ul className="space-y-3">
-                    {patient.recentAppointments.map((appt, index) => (
-                        <li key={index} className="text-slate-700 dark:text-slate-300">
-                            <strong className="font-medium text-slate-800 dark:text-slate-200">{appt.date}:</strong> {appt.reason}
-                        </li>
-                    ))}
-                    </ul>
-                </CardContent>
-            </Card>
+          <Card className="bg-white dark:bg-slate-900">
+            <CardHeader><CardTitle className="text-slate-900 dark:text-slate-50">Recent Appointments</CardTitle></CardHeader>
+            <CardContent>
+              <ul className="space-y-3">
+                {patient.recentAppointments.map((appt, index) => (
+                  <li key={index} className="text-slate-700 dark:text-slate-300">
+                    <strong className="font-medium text-slate-800 dark:text-slate-200">{appt.date}:</strong> {appt.reason}
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
 
-            <Card className="bg-white dark:bg-slate-900">
-                <CardHeader><CardTitle className="text-slate-900 dark:text-slate-50">Doctor's Notes</CardTitle></CardHeader>
-                <CardContent>
-                    <p className="text-slate-700 dark:text-slate-300">{patient.notes}</p>
-                </CardContent>
-            </Card>
+          <Card className="bg-white dark:bg-slate-900">
+            <CardHeader><CardTitle className="text-slate-900 dark:text-slate-50">Doctor&apos;s Notes</CardTitle></CardHeader>
+            <CardContent>
+              <p className="text-slate-700 dark:text-slate-300">{patient.notes}</p>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

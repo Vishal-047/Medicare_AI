@@ -11,9 +11,9 @@ export default function AppointmentsScheduling() {
         <div className="bg-white rounded-xl shadow p-8 space-y-6">
           <h2 className="text-2xl font-semibold mb-4">Common Solutions</h2>
           <ul className="list-disc pl-6 text-gray-700 space-y-3">
-            <li><span className="font-medium">Booking an Appointment:</span> Go to the 'Find Doctors' section, select your preferred doctor, choose an available time slot, and confirm your booking.</li>
-            <li><span className="font-medium">Rescheduling:</span> Visit 'My Appointments', select the appointment you wish to change, and choose a new date and time.</li>
-            <li><span className="font-medium">Cancelling:</span> In 'My Appointments', select the appointment and click 'Cancel'. Confirm your cancellation to free up the slot.</li>
+            <li><span className="font-medium">Booking an Appointment:</span> Go to the &apos;Find Doctors&apos; section, select your preferred doctor, choose an available time slot, and confirm your booking.</li>
+            <li><span className="font-medium">Rescheduling:</span> Visit &apos;My Appointments&apos;, select the appointment you wish to change, and choose a new date and time.</li>
+            <li><span className="font-medium">Cancelling:</span> In &apos;My Appointments&apos;, select the appointment and click &apos;Cancel&apos;. Confirm your cancellation to free up the slot.</li>
             <li><span className="font-medium">Appointment Reminders:</span> Enable notifications in your profile settings to receive reminders for upcoming appointments.</li>
             <li><span className="font-medium">Contact Support:</span> If you face issues, reach out via the Help Center contact form for assistance.</li>
           </ul>
@@ -44,7 +44,7 @@ export default function AppointmentsScheduling() {
               <li>How secure is my health data during bookings?</li>
               <li>Can I upload medical files for the doctor to review?</li>
               <li>Is there a limit on the number of appointments?</li>
-              <li>What to do if the appointment page doesn't load?</li>
+              <li>What to do if the appointment page doesn&apos;t load?</li>
             </ul>
           </div>
         </div>

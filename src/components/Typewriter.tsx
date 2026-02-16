@@ -11,6 +11,7 @@ interface TypewriterProps {
 
 const Typewriter: React.FC<TypewriterProps> = ({
   words,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   loop = true,
   typingSpeed = 70,
   deletingSpeed = 40,
@@ -20,6 +21,7 @@ const Typewriter: React.FC<TypewriterProps> = ({
   const [text, setText] = useState("")
   const [isDeleting, setIsDeleting] = useState(false)
   const [wordIndex, setWordIndex] = useState(0)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [typingInterval, setTypingInterval] = useState(typingSpeed)
 
   useEffect(() => {
@@ -47,13 +49,14 @@ const Typewriter: React.FC<TypewriterProps> = ({
 
     return () => clearTimeout(timeout)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [text, isDeleting])
+  }, [text, isDeleting, wordIndex, words, typingSpeed, deletingSpeed, pause])
 
   useEffect(() => {
     setText("")
     setIsDeleting(false)
     setWordIndex(0)
-  }, [words.join("")])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(words)])
 
   return (
     <span className={`typewriter ${className}`}>

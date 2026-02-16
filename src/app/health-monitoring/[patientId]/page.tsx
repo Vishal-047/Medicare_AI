@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, memo, useRef, useCallback, KeyboardEvent, useEffect, ReactNode } from 'react';
-import { FileText, Image as ImageIcon, X, UploadCloud, ArrowLeft, User, Briefcase, Lock, Mail, Phone, Fingerprint, Banknote, Landmark, CheckCircle2, Loader2, LogIn } from 'lucide-react';
+import { FileText, X, UploadCloud, ArrowLeft, User, Briefcase, Lock, Mail, Phone, Fingerprint, Banknote, Landmark, CheckCircle2, Loader2, LogIn } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
@@ -30,6 +30,7 @@ const InputWithIcon = ({ icon, ...props }: { icon: ReactNode } & React.Component
   </div>
 );
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const FileUploader = memo(({ name, label, file, onChange, onRemove, accept, isRequired = false, isImage = false }: any) => {
   const [preview, setPreview] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -163,7 +164,7 @@ export default function JoinUsPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState(initialState);
   const [submissionStatus, setSubmissionStatus] = useState<'idle' | 'submitting' | 'success'>('idle');
-  
+
   const steps = [{ id: 1, name: 'Verification', icon: <User /> }, { id: 2, name: 'Profile Details', icon: <Briefcase /> }, { id: 3, name: 'Admin & Financials', icon: <Lock /> }];
   const progress = ((currentStep) / (steps.length)) * 100;
 
@@ -181,11 +182,11 @@ export default function JoinUsPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (currentStep < steps.length) { nextStep(); return; }
-    
+
     setSubmissionStatus('submitting');
     if (!formData.agreedToTerms) {
-        toast({ title: "Agreement Required", description: "You must agree to the Terms of Service.", variant: "destructive" });
-        setSubmissionStatus('idle'); return;
+      toast({ title: "Agreement Required", description: "You must agree to the Terms of Service.", variant: "destructive" });
+      setSubmissionStatus('idle'); return;
     }
     await new Promise(resolve => setTimeout(resolve, 2000));
     setSubmissionStatus('success');
@@ -203,31 +204,31 @@ export default function JoinUsPage() {
       <main className="max-w-3xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8"><h1 className="text-4xl font-extrabold tracking-tight">Doctor Onboarding</h1><p className="mt-4 text-lg text-slate-600 dark:text-slate-400">Join our network of trusted healthcare professionals.</p></div>
         <AuthGuard auth={auth}>
-            {submissionStatus === 'success' ? (
-                <SubmissionSuccess onReset={handleReset} />
-            ) : (
-                <Card className="overflow-hidden">
-                <CardHeader>
-                    <div className="flex justify-between items-center mb-4"><CardTitle className="text-2xl flex items-center gap-2">{steps[currentStep - 1].icon} {steps[currentStep - 1].name}</CardTitle><span className="text-sm font-medium text-muted-foreground">Step {currentStep} of {steps.length}</span></div>
-                    <Progress value={progress} className="w-full" />
-                </CardHeader>
-                <CardContent className="mt-6">
-                    <form onSubmit={handleSubmit}>
-                    <AnimatePresence mode="wait">
-                        <motion.div key={currentStep} initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.3 }}>
-                            {currentStep === 1 && <Step1Verification data={formData} handlers={handlers} />}
-                            {currentStep === 2 && <Step2Profile data={formData} handlers={handlers} />}
-                            {currentStep === 3 && <Step3Admin data={formData} handlers={handlers} />}
-                        </motion.div>
-                    </AnimatePresence>
-                    <div className="mt-10 flex justify-between">
-                        <Button type="button" variant="outline" onClick={prevStep} className={currentStep === 1 ? 'invisible' : 'visible'}><ArrowLeft className="mr-2 h-4 w-4" /> Back</Button>
-                        <Button type="submit" className="min-w-[120px]" disabled={submissionStatus === 'submitting'}>{currentStep === steps.length ? (submissionStatus === 'submitting' ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Submitting...</> : 'Submit Application') : 'Next Step'}</Button>
-                    </div>
-                    </form>
-                </CardContent>
-                </Card>
-            )}
+          {submissionStatus === 'success' ? (
+            <SubmissionSuccess onReset={handleReset} />
+          ) : (
+            <Card className="overflow-hidden">
+              <CardHeader>
+                <div className="flex justify-between items-center mb-4"><CardTitle className="text-2xl flex items-center gap-2">{steps[currentStep - 1].icon} {steps[currentStep - 1].name}</CardTitle><span className="text-sm font-medium text-muted-foreground">Step {currentStep} of {steps.length}</span></div>
+                <Progress value={progress} className="w-full" />
+              </CardHeader>
+              <CardContent className="mt-6">
+                <form onSubmit={handleSubmit}>
+                  <AnimatePresence mode="wait">
+                    <motion.div key={currentStep} initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.3 }}>
+                      {currentStep === 1 && <Step1Verification data={formData} handlers={handlers} />}
+                      {currentStep === 2 && <Step2Profile data={formData} handlers={handlers} />}
+                      {currentStep === 3 && <Step3Admin data={formData} handlers={handlers} />}
+                    </motion.div>
+                  </AnimatePresence>
+                  <div className="mt-10 flex justify-between">
+                    <Button type="button" variant="outline" onClick={prevStep} className={currentStep === 1 ? 'invisible' : 'visible'}><ArrowLeft className="mr-2 h-4 w-4" /> Back</Button>
+                    <Button type="submit" className="min-w-[120px]" disabled={submissionStatus === 'submitting'}>{currentStep === steps.length ? (submissionStatus === 'submitting' ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Submitting...</> : 'Submit Application') : 'Next Step'}</Button>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+          )}
         </AuthGuard>
       </main>
       <Footer />
@@ -236,6 +237,7 @@ export default function JoinUsPage() {
 }
 
 // --- Memoized Step Components ---
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Step1Verification = memo(({ data, handlers }: any) => (
   <div className="space-y-6">
     <FieldWrapper><label className="font-medium text-sm">Medical Council Reg. Number <span className="text-red-500">*</span></label><InputWithIcon icon={<Fingerprint className="h-4 w-4 text-muted-foreground" />} id="medicalCouncilRegistrationNumber" name="medicalCouncilRegistrationNumber" value={data.medicalCouncilRegistrationNumber} onChange={handlers.handleChange} required /></FieldWrapper>
@@ -250,6 +252,7 @@ const Step1Verification = memo(({ data, handlers }: any) => (
 ));
 Step1Verification.displayName = 'Step1Verification';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Step2Profile = memo(({ data, handlers }: any) => (
   <div className="space-y-6">
     <FieldWrapper><label className="font-medium text-sm">Full Name <span className="text-red-500">*</span></label><InputWithIcon icon={<User className="h-4 w-4 text-muted-foreground" />} id="fullName" name="fullName" value={data.fullName} onChange={handlers.handleChange} required /></FieldWrapper>
@@ -263,6 +266,7 @@ const Step2Profile = memo(({ data, handlers }: any) => (
 ));
 Step2Profile.displayName = 'Step2Profile';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Step3Admin = memo(({ data, handlers }: any) => (
   <div className="space-y-6">
     <Alert><AlertTitle className="flex items-center gap-2"><Lock className="h-4 w-4" />Confidential Information</AlertTitle><AlertDescription>This information is used for administrative and payment purposes only and will not be shared publicly.</AlertDescription></Alert>

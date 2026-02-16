@@ -1,7 +1,9 @@
 import crypto from "crypto"
 
 // For a real application, you would use an SMS service like Twilio
-const twilio = require("twilio")(
+import Twilio from "twilio"
+
+const twilio = Twilio(
   process.env.TWILIO_ACCOUNT_SID,
   process.env.TWILIO_AUTH_TOKEN
 )

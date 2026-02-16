@@ -38,7 +38,7 @@ export async function GET() {
     return NextResponse.json({ data: formattedDoctors }, { status: 200 })
   } catch (error) {
     return NextResponse.json(
-      // @ts-ignore
+      // @ts-expect-error
       { message: "Internal Server Error", error: error.message },
       { status: 500 }
     )

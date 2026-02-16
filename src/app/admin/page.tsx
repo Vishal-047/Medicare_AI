@@ -130,6 +130,7 @@ export default function AdminDashboard() {
       if (!response.ok) throw new Error("Failed to fetch applications")
       const { data } = await response.json()
       setApplications(data)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast({
         title: "Error fetching applications",
@@ -143,6 +144,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     fetchApplications()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleAction = async (
@@ -161,11 +163,11 @@ export default function AdminDashboard() {
 
       toast({
         title: `Application ${newStatus}`,
-        description: `Doctor ${
-          applications.find((app) => app._id === id)?.fullName
-        } has been ${newStatus}.`,
+        description: `Doctor ${applications.find((app) => app._id === id)?.fullName
+          } has been ${newStatus}.`,
       })
       fetchApplications()
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast({
         title: `Failed to ${newStatus} application`,

@@ -160,6 +160,7 @@ export default function AIReportAnalyzer() {
 
       const result: AnalysisResult = await response.json()
       setAnalysisResult(result)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
       setError(e.message || "An unexpected error occurred. Please try again.")
     } finally {
@@ -179,6 +180,7 @@ export default function AIReportAnalyzer() {
     setIsSaving(true)
 
     const formData = new FormData()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let recordData: any = {
       type: "Lab Results",
       doctor: "AI Analyzer",
@@ -188,9 +190,8 @@ export default function AIReportAnalyzer() {
     if (saveOnlyOriginal) {
       recordData.diagnosis = file.name || "Uploaded Report"
     } else {
-      recordData.diagnosis = `AI Analysis: ${
-        analysisResult.keyFindings[0]?.label || "Report"
-      }`
+      recordData.diagnosis = `AI Analysis: ${analysisResult.keyFindings[0]?.label || "Report"
+        }`
       recordData.analysis = analysisResult
     }
 
@@ -270,18 +271,16 @@ export default function AIReportAnalyzer() {
             <CardContent>
               <div
                 {...getRootProps()}
-                className={`relative border-2 border-dashed rounded-lg p-12 text-center transition-colors duration-200 ease-in-out ${
-                  isDragActive
+                className={`relative border-2 border-dashed rounded-lg p-12 text-center transition-colors duration-200 ease-in-out ${isDragActive
                     ? "border-blue-500 bg-blue-50 dark:bg-blue-900/10"
                     : "border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600"
-                }`}
+                  }`}
               >
                 <input {...getInputProps()} />
                 <div className="flex flex-col items-center justify-center space-y-4">
                   <FileUp
-                    className={`w-16 h-16 ${
-                      isDragActive ? "text-blue-600" : "text-gray-400"
-                    }`}
+                    className={`w-16 h-16 ${isDragActive ? "text-blue-600" : "text-gray-400"
+                      }`}
                   />
                   {isDragActive ? (
                     <p className="text-lg font-semibold text-blue-600">

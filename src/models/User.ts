@@ -1,4 +1,4 @@
-import mongoose, { Schema, model, models, Document } from "mongoose"
+import { Schema, model, models, Document } from "mongoose"
 
 export interface IMedicalRecord extends Document {
   type: string
@@ -8,6 +8,7 @@ export interface IMedicalRecord extends Document {
   date: Date
   originalReportUrl?: string
   analysis?: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     keyFindings: any
     summary: string
     nextSteps: string[]

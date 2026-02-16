@@ -105,9 +105,9 @@ function getDistance(
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2)
+    Math.cos((lat2 * Math.PI) / 180) *
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2)
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
   return R * c
 }
@@ -128,6 +128,7 @@ const getAutocompleteAPI = async (
   const response = await fetch(url)
   if (!response.ok) throw new Error("Failed to fetch suggestions.")
   const data = await response.json()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (data.results || []).map((r: any) => ({
     id: r.place_id,
     name: r.name || r.address_line1,
@@ -150,6 +151,7 @@ const findNearbyHospitalsAPI = async (location: {
   const data = await response.json()
   if (!data.features || data.features.length === 0) return []
   return data.features.map(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (feature: any): Hospital => ({
       id: feature.properties.place_id,
       name: feature.properties.name,
@@ -228,9 +230,8 @@ const HospitalCard = ({
           onClick={onToggleSave}
         >
           <Heart
-            className={`h-5 w-5 transition-all ${
-              isSaved ? "text-red-500 fill-red-500" : "text-red-500"
-            }`}
+            className={`h-5 w-5 transition-all ${isSaved ? "text-red-500 fill-red-500" : "text-red-500"
+              }`}
           />
         </Button>
       </div>
@@ -484,6 +485,7 @@ export default function AdvancedHospitalSearch() {
         setStatus("success")
         return `Details for ${result.name} loaded.`
       },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       error: (err: any) => {
         setStatus("error")
         return err.message
@@ -714,15 +716,15 @@ export default function AdvancedHospitalSearch() {
                   {status === "error"
                     ? "Search Failed"
                     : results.length > 0
-                    ? "No Results Match Filters"
-                    : "Your Search Awaits"}
+                      ? "No Results Match Filters"
+                      : "Your Search Awaits"}
                 </h3>
                 <p className="text-muted-foreground mt-2 max-w-md mx-auto">
                   {status === "error"
                     ? "There was an issue with the search. Please try again."
                     : results.length > 0
-                    ? "Try adjusting or clearing your filters."
-                    : "Enter a hospital name to see live suggestions, or find facilities near you."}
+                      ? "Try adjusting or clearing your filters."
+                      : "Enter a hospital name to see live suggestions, or find facilities near you."}
                 </p>
               </motion.div>
             </div>

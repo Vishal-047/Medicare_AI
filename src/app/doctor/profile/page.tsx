@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { User, Briefcase, Lock } from "lucide-react";
+import { User, Lock } from "lucide-react";
 
 export default function ProfilePage() {
     const [doctor, setDoctor] = useState({
@@ -19,7 +19,8 @@ export default function ProfilePage() {
 
     const [isEditing, setIsEditing] = useState(false);
 
-    const handleInputChange = (e) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleInputChange = (e: any) => {
         const { name, value } = e.target;
         setDoctor(prev => ({ ...prev, [name]: value }));
     };
@@ -100,7 +101,7 @@ export default function ProfilePage() {
                         <Label htmlFor="confirm-password">Confirm New Password</Label>
                         <Input id="confirm-password" type="password" />
                     </div>
-                     <div className="flex justify-end mt-4">
+                    <div className="flex justify-end mt-4">
                         <Button>Update Password</Button>
                     </div>
                 </CardContent>

@@ -78,9 +78,9 @@ export async function PUT(
       { status: 200 }
     )
   } catch (error) {
-    // @ts-ignore
+    // @ts-expect-error
     return NextResponse.json(
-      // @ts-ignore
+      // @ts-expect-error
       { message: "Internal Server Error", error: error?.message },
       { status: 500 }
     )

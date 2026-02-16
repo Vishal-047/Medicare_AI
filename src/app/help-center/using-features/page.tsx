@@ -12,8 +12,8 @@ export default function UsingFeatures() {
           <h2 className="text-2xl font-semibold mb-4">Common Solutions</h2>
           <ul className="list-disc pl-6 text-gray-700 space-y-3">
             <li><span className="font-medium">Health Charts:</span> Track your health metrics over time using the Health Monitoring dashboard.</li>
-            <li><span className="font-medium">Doctor Finder:</span> Use the 'Find Doctors' feature to search for healthcare professionals by specialty, location, or rating.</li>
-            <li><span className="font-medium">File Upload:</span> Securely upload and manage your medical documents in the 'Medical Records' section.</li>
+            <li><span className="font-medium">Doctor Finder:</span> Use the &apos;Find Doctors&apos; feature to search for healthcare professionals by specialty, location, or rating.</li>
+            <li><span className="font-medium">File Upload:</span> Securely upload and manage your medical documents in the &apos;Medical Records&apos; section.</li>
             <li><span className="font-medium">Notifications:</span> Enable notifications to receive reminders and important updates.</li>
             <li><span className="font-medium">Support:</span> For help with features, visit the Help Center or contact support.</li>
           </ul>

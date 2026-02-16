@@ -160,6 +160,7 @@ const MedicalRecords = () => {
         const data = await response.json()
         setMedicalHistory(data.medicalHistory)
         setDocuments(data.documents)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         console.error("Failed to fetch medical records:", error)
         setError(error.message)
@@ -266,6 +267,7 @@ const MedicalRecords = () => {
       setRecordType("")
       setRecordStatus("")
       fetchRecords()
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       setAddRecordError(error.message || "Failed to add record.")
     } finally {
@@ -303,6 +305,7 @@ const MedicalRecords = () => {
       if (error) {
         toast.error(error.message || "An error occurred during redirection.")
       }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       toast.error(err.message || "Could not initiate payment.")
     } finally {
@@ -372,9 +375,9 @@ const MedicalRecords = () => {
                   <div className="text-xl font-bold text-foreground">
                     {nextAppointment.date
                       ? new Date(nextAppointment.date).toLocaleDateString(
-                          "en-US",
-                          { month: "short", day: "numeric", year: "numeric" }
-                        )
+                        "en-US",
+                        { month: "short", day: "numeric", year: "numeric" }
+                      )
                       : "No upcoming"}
                   </div>
                 </div>
@@ -529,7 +532,7 @@ const MedicalRecords = () => {
                                     Key Findings
                                   </h4>
                                   {Array.isArray(record.analysis.keyFindings) &&
-                                  record.analysis.keyFindings.length > 0 ? (
+                                    record.analysis.keyFindings.length > 0 ? (
                                     <ul className="space-y-2">
                                       {record.analysis.keyFindings.map(
                                         (finding, index) => (
@@ -557,7 +560,7 @@ const MedicalRecords = () => {
                                     Next Steps
                                   </h4>
                                   {Array.isArray(record.analysis.nextSteps) &&
-                                  record.analysis.nextSteps.length > 0 ? (
+                                    record.analysis.nextSteps.length > 0 ? (
                                     <ul className="list-disc list-inside space-y-1 text-foreground font-inter font-normal">
                                       {record.analysis.nextSteps.map(
                                         (step, index) => (
