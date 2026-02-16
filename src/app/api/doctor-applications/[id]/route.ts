@@ -79,7 +79,7 @@ export async function PUT(
     )
   } catch (error) {
     return NextResponse.json(
-      // @ts-expect-error
+      // @ts-expect-error -- Error message property might not exist on generic Error type
       { message: "Internal Server Error", error: error?.message },
       { status: 500 }
     )

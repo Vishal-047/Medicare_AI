@@ -49,7 +49,7 @@ const HealthChart: React.FC<HealthChartProps> = ({ chartId, title, labels, data 
                 ticks: {
                   maxRotation: 0,
                   minRotation: 0,
-                  callback: function (value, index, _values) {
+                  callback: function (value, index) {
                     // Show only a few labels to avoid clutter
                     if (labels.length <= 10) return labels[index];
                     if (index === 0 || index === labels.length - 1) return labels[index];

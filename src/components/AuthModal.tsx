@@ -223,7 +223,7 @@ const AuthModal = ({ isOpen, setIsOpen, message, defaultTab = "signin" }: AuthMo
       }
       // On a successful password check, we no longer fall through to here.
       // The session is not created yet.
-    } catch (error) {
+    } catch {
       toast.error("An unknown error occurred during login.")
     } finally {
       setIsLoading(false)
@@ -247,7 +247,7 @@ const AuthModal = ({ isOpen, setIsOpen, message, defaultTab = "signin" }: AuthMo
         setIsOpen(false)
         router.refresh()
       }
-    } catch (error) {
+    } catch {
       toast.error("An error occurred during OTP verification.")
     } finally {
       setIsLoading(false)

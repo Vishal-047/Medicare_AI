@@ -21,7 +21,7 @@ export default function Contact() {
     <div className="min-h-screen bg-gray-50 flex flex-col items-center py-10 px-2">
       <div className="w-full max-w-2xl bg-white rounded-xl shadow p-8">
         <h1 className="text-4xl font-bold mb-2 text-center">Contact Us</h1>
-        <p className="text-lg text-gray-500 mb-8 text-center">We're here to help. Reach out with your questions.</p>
+        <p className="text-lg text-gray-500 mb-8 text-center">We&apos;re here to help. Reach out with your questions.</p>
 
         {/* Support Info Section */}
         <section className="mb-8">

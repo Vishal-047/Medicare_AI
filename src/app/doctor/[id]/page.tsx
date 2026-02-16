@@ -75,7 +75,7 @@ export default async function DoctorDashboardPage({
           Welcome, Dr. {doctor.name}!
         </h1>
         <p className="text-slate-500 dark:text-slate-400">
-          Here's a summary of your activity today.
+          Here&apos;s a summary of your activity today.
         </p>
       </div>
 

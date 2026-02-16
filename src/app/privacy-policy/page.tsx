@@ -1,6 +1,5 @@
 "use client"
 
-import Link from "next/link";
 
 const sections = [
   { id: "introduction", label: "Introduction" },
@@ -133,7 +132,7 @@ export default function PrivacyPolicy() {
                 protect your information. However, no method of transmission or storage is 100% secure.
               </li>
               <li>
-                <span className="font-medium">Children's Privacy:</span> Medicare-AI is not intended for children under 16. We do not
+                <span className="font-medium">Children&apos;s Privacy:</span> Medicare-AI is not intended for children under 16. We do not
                 knowingly collect data from children. If you believe a child has provided us with information, please contact us so we can delete it.
               </li>
               <li>

@@ -14,7 +14,6 @@ import {
   Bot,
   User,
   Send,
-  X,
   MessageSquarePlus,
   Download,
   AlertTriangle,
@@ -34,7 +33,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Header from "@/components/Header";
 import { toast } from "sonner";
@@ -76,10 +75,10 @@ interface SpeechRecognitionErrorEvent extends Event {
 }
 interface CustomWindow extends Window {
   SpeechRecognition: {
-    new (): SpeechRecognition;
+    new(): SpeechRecognition;
   };
   webkitSpeechRecognition: {
-    new (): SpeechRecognition;
+    new(): SpeechRecognition;
   };
 }
 declare const window: CustomWindow;
@@ -159,28 +158,28 @@ const SonarMicButton = ({
 );
 
 const ChatMessage = ({ msg }: { msg: Message }) => {
-    const isUser = msg.role === 'user';
-    const formatAnalysis = (text: string) => {
-      return text
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\n/g, '<br />');
-    };
-  
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-        className={cn("flex items-start gap-3", isUser ? "justify-end" : "justify-start")}
-      >
-        {!isUser && <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary"><Bot className="w-5 h-5" /></div>}
-        <div className={cn("rounded-2xl px-4 py-3 max-w-[80%] break-words", isUser ? "bg-primary text-primary-foreground rounded-br-none" : "bg-background dark:bg-slate-800 border dark:border-slate-700 rounded-bl-none")}>
-          {isUser ? msg.content : <p className="leading-relaxed" dangerouslySetInnerHTML={{ __html: formatAnalysis(msg.content) }} />}
-        </div>
-        {isUser && <div className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-muted-foreground"><User className="w-5 h-5" /></div>}
-      </motion.div>
-    );
+  const isUser = msg.role === 'user';
+  const formatAnalysis = (text: string) => {
+    return text
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n/g, '<br />');
   };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className={cn("flex items-start gap-3", isUser ? "justify-end" : "justify-start")}
+    >
+      {!isUser && <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary"><Bot className="w-5 h-5" /></div>}
+      <div className={cn("rounded-2xl px-4 py-3 max-w-[80%] break-words", isUser ? "bg-primary text-primary-foreground rounded-br-none" : "bg-background dark:bg-slate-800 border dark:border-slate-700 rounded-bl-none")}>
+        {isUser ? msg.content : <p className="leading-relaxed" dangerouslySetInnerHTML={{ __html: formatAnalysis(msg.content) }} />}
+      </div>
+      {isUser && <div className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-muted-foreground"><User className="w-5 h-5" /></div>}
+    </motion.div>
+  );
+};
 
 // =================================================================================
 // MAIN PAGE COMPONENT
@@ -361,25 +360,25 @@ const SpeechAnalysisPage = () => {
     if (!lastDoctorMsg) return { conditions: [], flags: [] };
 
     const conditionsMatch = lastDoctorMsg.content.match(
-      /Possible Conditions:(.*?)(?=Recommendations:|Red Flags:|$)/s
+      /Possible Conditions:([\s\S]*?)(?=Recommendations:|Red Flags:|$)/
     );
     const flagsMatch = lastDoctorMsg.content.match(
-      /Red Flags:(.*?)(?=Next Steps:|Disclaimer:|$)/s
+      /Red Flags:([\s\S]*?)(?=Next Steps:|Disclaimer:|$)/
     );
 
     const conditions = conditionsMatch
       ? conditionsMatch[1]
-          .trim()
-          .split("\n")
-          .map((c) => c.replace(/^-/, "").replace(/\*/g, "").trim())
-          .filter(Boolean)
+        .trim()
+        .split("\n")
+        .map((c) => c.replace(/^-/, "").replace(/\*/g, "").trim())
+        .filter(Boolean)
       : [];
     const flags = flagsMatch
       ? flagsMatch[1]
-          .trim()
-          .split("\n")
-          .map((f) => f.replace(/^-/, "").replace(/\*/g, "").trim())
-          .filter(Boolean)
+        .trim()
+        .split("\n")
+        .map((f) => f.replace(/^-/, "").replace(/\*/g, "").trim())
+        .filter(Boolean)
       : [];
 
     return { conditions, flags };

@@ -28,11 +28,11 @@ export default function UsingFeatures() {
               <li>How to access the AI chat or virtual assistant?</li>
               <li>How to use the appointment popover form?</li>
               <li>Can I sort doctors by rating or fee?</li>
-              <li>What is the "File Upload" feature?</li>
+              <li>What is the &quot;File Upload&quot; feature?</li>
               <li>How to filter doctors by specialization or gender?</li>
               <li>How to bookmark favorite doctors?</li>
               <li>Can I access past consultation summaries?</li>
-              <li>What is the "Health Chart" feature and how to use it?</li>
+              <li>What is the &quot;Health Chart&quot; feature and how to use it?</li>
               <li>Can I share data with family or caretakers?</li>
               <li>What notifications will I receive?</li>
               <li>How to enable or disable AI suggestions?</li>

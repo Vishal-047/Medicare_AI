@@ -1,6 +1,4 @@
-"use client"
-
-import { useState, ReactNode, useMemo, useEffect } from "react"
+import { useState, useMemo, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -9,7 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 import {
   Dialog,
   DialogContent,
@@ -19,7 +16,6 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog"
 import {
-  Search,
   MapPin,
   Loader2,
   Navigation,
@@ -436,6 +432,7 @@ export default function AdvancedHospitalSearch() {
         handleNearMeSearch(false) // Silently search on load
       }
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Autocomplete effect
@@ -508,7 +505,7 @@ export default function AdvancedHospitalSearch() {
   }
 
   const displayedHospitals = useMemo(() => {
-    let hospitals = showSavedOnly ? savedHospitals : results
+    const hospitals = showSavedOnly ? savedHospitals : results
     if (userLocation) {
       const withDistance = hospitals.map((h) => ({
         ...h,

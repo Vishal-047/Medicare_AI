@@ -91,7 +91,7 @@ export async function POST(req: NextRequest) {
     )
   } catch (error) {
     console.error("[API] Doctor application error:", error)
-    // @ts-expect-error
+    // @ts-expect-error -- Mongoose error code property might not exist on generic Error type
     if (error.code === 11000) {
       return NextResponse.json(
         {
@@ -102,7 +102,7 @@ export async function POST(req: NextRequest) {
       )
     }
     return NextResponse.json(
-      // @ts-expect-error
+      // @ts-expect-error -- Error message property might not exist on generic Error type
       { message: "Internal Server Error", error: error?.message },
       { status: 500 }
     )

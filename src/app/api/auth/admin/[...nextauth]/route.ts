@@ -1,5 +1,3 @@
-import { connectDB } from "@/lib/db"
-import Admin from "@/models/Admin"
 import NextAuth, { AuthOptions } from "next-auth"
 import { JWT } from "next-auth/jwt"
 import CredentialsProvider from "next-auth/providers/credentials"
