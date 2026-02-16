@@ -111,7 +111,7 @@ const TeamPage = () => {
       {/* Join Our Team Now section */}
       <div className="w-full bg-gradient-to-r from-blue-700 to-blue-500 py-10 px-4 flex flex-col items-center justify-center mt-16 rounded-xl shadow-lg">
         <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">Join Our Team Now</h3>
-        <p className="text-white/80 mb-4 max-w-xl text-center">We're always looking for passionate professionals to join us in revolutionizing healthcare. Explore our team and open positions!</p>
+        <p className="text-white/80 mb-4 max-w-xl text-center">We&apos;re always looking for passionate professionals to join us in revolutionizing healthcare. Explore our team and open positions!</p>
         <div className="flex gap-4">
           <a href="/team" className="px-5 py-2 rounded-full bg-white text-blue-700 font-semibold shadow hover:bg-blue-100 transition">Learn More</a>
           <button

@@ -13,14 +13,22 @@ export async function GET(req: NextRequest) {
   
   try {
     await connectDB()
-    const user = await User.findById(token.id).select("medicalHistory documents")
-    
+    const user = await User.findById(token.id).select(
+      "medicalHistory documents"
+    )
+
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
-    const sortedHistory = (user.medicalHistory || []).sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime())
-    const sortedDocuments = (user.documents || []).sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    const sortByDateDesc = <T extends { date?: string | Date }>(
+      a: T,
+      b: T
+    ) =>
+      new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime()
+
+    const sortedHistory = (user.medicalHistory || []).sort(sortByDateDesc)
+    const sortedDocuments = (user.documents || []).sort(sortByDateDesc)
 
     return NextResponse.json({ medicalHistory: sortedHistory, documents: sortedDocuments })
   } catch (error) {
@@ -108,15 +116,17 @@ export async function POST(req: NextRequest) {
     }
     // Case 3: Invalid request
     else {
-      return NextResponse.json({ error: "No file or record data provided" }, { status: 400 })
+      return NextResponse.json(
+        { error: "No file or record data provided" },
+        { status: 400 }
+      )
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error saving medical record:", error)
-    return NextResponse.json(
-      { error: error.message || "Failed to save medical record." },
-      { status: 500 }
-    )
+    const message =
+      error instanceof Error
+        ? error.message
+        : "Failed to save medical record."
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }
-
-
