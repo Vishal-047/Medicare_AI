@@ -1,1 +1,1 @@
-{"name": "medicare-ai","version": "1.0.0","private": true,"dependencies": {"react": "^18.0.0","next": "15.3.8"},"devDependencies": {},"scripts": {"dev": "next dev","build": "next build","start": "next start"}}
+{"name": "medicare-ai","version": "1.0.0","private": true,"dependencies": {"react": "^19.0.0","react-dom": "^19.0.0","next": "15.3.8"},"devDependencies": {},"scripts": {"dev": "next dev","build": "next build","start": "next start"}}
