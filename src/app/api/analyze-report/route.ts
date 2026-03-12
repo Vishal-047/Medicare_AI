@@ -1,30 +1,35 @@
 import { NextRequest, NextResponse } from "next/server"
 import { GoogleGenerativeAI } from "@google/generative-ai"
-import { Poppler } from "node-poppler"
 import path from "path"
 import fs from "fs/promises"
 import { recognize } from "node-tesseract-ocr"
 import os from "os"
 
-// Cross-platform Poppler instance
-let poppler: Poppler
-if (os.platform() === "win32") {
-  poppler = new Poppler(
-    path.join(
-      process.cwd(),
-      "node_modules",
-      "node-poppler",
-      "src",
-      "lib",
-      "win32",
-      "poppler-24.07.0",
-      "Library",
-      "bin"
+// Force dynamic to prevent Next.js from collecting page data at build time
+export const dynamic = "force-dynamic"
+
+// Lazy-load Poppler only at runtime to avoid build-time binary resolution errors
+function getPoppler() {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { Poppler } = require("node-poppler")
+  if (os.platform() === "win32") {
+    return new Poppler(
+      path.join(
+        process.cwd(),
+        "node_modules",
+        "node-poppler",
+        "src",
+        "lib",
+        "win32",
+        "poppler-24.07.0",
+        "Library",
+        "bin"
+      )
     )
-  )
-} else {
-  poppler = new Poppler()
+  }
+  return new Poppler()
 }
+
 
 // Do NOT import pdfjs statically. It will be imported dynamically inside the function.
 
@@ -39,7 +44,7 @@ async function extractTextFromBuffer(
     await fs.writeFile(tempFilePath, buffer)
 
     try {
-      const text = await poppler.pdfToText(tempFilePath)
+      const text = await getPoppler().pdfToText(tempFilePath)
       return text
     } catch (error) {
       console.error("Error processing PDF with Poppler:", error)
