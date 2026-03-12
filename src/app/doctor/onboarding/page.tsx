@@ -1,9 +1,9 @@
 "use client"
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Loader2 } from "lucide-react"
 
-export default function DoctorOnboarding() {
+function DoctorOnboardingContent() {
   const router = useRouter()
   const params = useSearchParams()
   const email = params.get("email")
@@ -33,5 +33,20 @@ export default function DoctorOnboarding() {
       </p>
       {error && <p className="text-red-500 mt-4">{error}</p>}
     </div>
+  )
+}
+
+export default function DoctorOnboarding() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex flex-col items-center justify-center min-h-screen">
+          <Loader2 className="w-12 h-12 animate-spin mb-4" />
+          <h2 className="text-xl font-semibold">Loading...</h2>
+        </div>
+      }
+    >
+      <DoctorOnboardingContent />
+    </Suspense>
   )
 }
