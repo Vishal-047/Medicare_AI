@@ -44,15 +44,22 @@ export const authOptions: AuthOptions = {
           throw new Error("Invalid credentials.")
         }
 
-        // Send OTP
-        const otp = generateOtp()
-        user.otp = otp
-        user.otpExpires = new Date(Date.now() + 10 * 60 * 1000) // 10 minutes
-        await user.save()
-        await sendOtp(user.phoneNumber, otp)
+        // ── [OTP DISABLED for development - uncomment for production] ──────
+        // const otp = generateOtp()
+        // user.otp = otp
+        // user.otpExpires = new Date(Date.now() + 10 * 60 * 1000) // 10 min
+        // await user.save()
+        // await sendOtp(user.phoneNumber, otp)
+        // throw new Error(`OTP_REQUIRED:${user.email}`)
+        // ────────────────────────────────────────────────────────────────────
 
-        // Signal to client to prompt for OTP
-        throw new Error(`OTP_REQUIRED:${user.email}`)
+        // Direct login: return user immediately (no OTP step)
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+        }
       },
     }),
     CredentialsProvider({

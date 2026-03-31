@@ -41,17 +41,19 @@ async function extractTextFromBuffer(
     const tempDir = path.join(process.cwd(), "temp")
     await fs.mkdir(tempDir, { recursive: true })
     const tempFilePath = path.join(tempDir, `upload-${Date.now()}.pdf`)
-    await fs.writeFile(tempFilePath, buffer)
 
     try {
-      const text = await getPoppler().pdfToText(tempFilePath)
+      // Write the file INSIDE the try block so the finally cleanup always fires
+      await fs.writeFile(tempFilePath, buffer)
+      const poppler = getPoppler()
+      const text = await poppler.pdfToText(tempFilePath)
       return text
     } catch (error) {
       console.error("Error processing PDF with Poppler:", error)
       throw new Error("Failed to extract text from PDF.")
     } finally {
-      // Clean up the temporary file
-      await fs.unlink(tempFilePath)
+      // Always clean up the temporary file, even if getPoppler() or pdfToText() threw
+      await fs.unlink(tempFilePath).catch(() => { /* ignore unlink errors */ })
     }
   } else if (mimeType.startsWith("image/")) {
     try {

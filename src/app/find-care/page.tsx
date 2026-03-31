@@ -561,6 +561,33 @@ export default function AdvancedHospitalSearch() {
           className="max-w-2xl mx-auto mt-10"
         >
           <Card className="p-4 md:p-6 shadow-2xl shadow-slate-300/20 dark:shadow-black/50 bg-background/80 backdrop-blur-xl border-slate-200/50 dark:border-slate-800/50">
+            {/* Search Input — was missing from the original render! */}
+            <div className="relative mb-3">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search hospital by name or city..."
+                className="w-full h-12 pl-4 pr-10 rounded-lg border border-input bg-background text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                aria-label="Search hospitals"
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") {
+                    setSearchTerm("")
+                    setSuggestions([])
+                  }
+                }}
+              />
+              {searchTerm && (
+                <button
+                  onClick={() => { setSearchTerm(""); setSuggestions([]) }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label="Clear search"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+
             <div className="relative">
               <AnimatePresence>
                 {suggestions.length > 0 && (
@@ -627,7 +654,7 @@ export default function AdvancedHospitalSearch() {
           )}
         </motion.div>
 
-        {isMounted && results.length > 0 && (
+        {isMounted && (results.length > 0 || savedHospitals.length > 0) && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

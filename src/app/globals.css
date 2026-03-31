@@ -201,11 +201,11 @@
   background-color: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: hsl(var(--border));
+  background-color: var(--border);
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: hsl(var(--ring));
+  background-color: var(--ring);
 }
 
 @keyframes vertical-scroll {
@@ -231,4 +231,20 @@
 
 .testimonial-scroll-inner:hover {
   animation-play-state: paused;
+}
+
+/* Hero floating badge animations */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes float-medium {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-7px); }
+}
+.animate-float-slow {
+  animation: float-slow 4s ease-in-out infinite;
+}
+.animate-float-medium {
+  animation: float-medium 3s ease-in-out infinite;
 }

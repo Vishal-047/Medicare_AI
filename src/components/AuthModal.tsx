@@ -142,15 +142,14 @@ const AuthModal = ({ isOpen, setIsOpen, message, defaultTab = "signin" }: AuthMo
     )
   }
 
-  // Use variables to avoid unused warning
-  useEffect(() => {
-    if (false) {
-      console.log(location, isGettingLocation, handleGetLocation);
-    }
-  }, [location, isGettingLocation])
+  // location state is used in the signup form below
 
-  // New handler to request OTP for signup
-  const handleRequestSignupOtp = async (e: React.FormEvent) => {
+  // ── [OTP DISABLED for development] ────────────────────────────────────────
+  // Direct signup: creates account immediately without OTP verification.
+  // To re-enable OTP: replace this with handleRequestSignupOtp → setSignupStep("otp")
+  // and restore handleVerifySignup as the second step.
+  // ───────────────────────────────────────────────────────────────────────────
+  const handleDirectSignup = async (e: React.FormEvent) => {
     e.preventDefault()
     if (password !== confirmPassword) {
       toast.error("Passwords don't match!")
@@ -158,36 +157,28 @@ const AuthModal = ({ isOpen, setIsOpen, message, defaultTab = "signin" }: AuthMo
     }
     setIsLoading(true)
     try {
-      const userData = { name, email, password, phoneNumber }
-      await axios.post("/api/auth/send-otp", userData)
-      toast.success("OTP has been sent to your phone.")
-      setSignupStep("otp")
-    } catch (error) {
-      const axiosError = error as AxiosError<{ message: string }>
-      toast.error(axiosError.response?.data?.message || "Failed to send OTP.")
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  // Renamed from handleSignUp to reflect its new purpose
-  const handleVerifySignup = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    try {
-      await axios.post("/api/signup", { email, otp })
-      toast.success("Account created successfully! Please sign in.")
-      // Reset form and switch to signin
+      await axios.post("/api/auth/register", {
+        name,
+        email,
+        password,
+        phoneNumber,
+        ...(location
+          ? { latitude: location.latitude, longitude: location.longitude }
+          : {}),
+      })
+      toast.success("Account created! Please sign in.")
+      // Reset form fields and flip to sign-in tab
+      setName("")
+      setEmail("")
       setPassword("")
       setConfirmPassword("")
-      setName("")
       setPhoneNumber("")
       setOtp("")
       setSignupStep("details")
       setActiveTab("signin")
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>
-      toast.error(axiosError.response?.data?.message || "Failed to verify OTP.")
+      toast.error(axiosError.response?.data?.message || "Registration failed.")
     } finally {
       setIsLoading(false)
     }
@@ -209,20 +200,22 @@ const AuthModal = ({ isOpen, setIsOpen, message, defaultTab = "signin" }: AuthMo
 
       if (res?.error) {
         if (res.error.startsWith("OTP_REQUIRED")) {
-          // This is the expected "error" for the first step.
+          // OTP flow (re-enable in auth.ts for production)
           const emailFromServer = res.error.split(":")[1]
-          setEmail(emailFromServer) // Store email for the OTP verification step
+          setEmail(emailFromServer)
           toast.success("OTP sent to your registered phone number.")
           setLoginStep("otp")
           setLoginMethod("phone")
           setSignupStep("details")
         } else {
-          // This is a real error like "Incorrect password."
           toast.error(res.error)
         }
+      } else {
+        // Direct login success (OTP disabled in development)
+        toast.success("Login successful!")
+        setIsOpen(false)
+        router.refresh()
       }
-      // On a successful password check, we no longer fall through to here.
-      // The session is not created yet.
     } catch {
       toast.error("An unknown error occurred during login.")
     } finally {
@@ -396,7 +389,7 @@ const AuthModal = ({ isOpen, setIsOpen, message, defaultTab = "signin" }: AuthMo
 
           <TabsContent value="signup">
             {signupStep === "details" && (
-              <form onSubmit={handleRequestSignupOtp} className="space-y-4">
+              <form onSubmit={handleDirectSignup} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="signup-name">Full Name</Label>
                   <Input
@@ -426,9 +419,27 @@ const AuthModal = ({ isOpen, setIsOpen, message, defaultTab = "signin" }: AuthMo
                     value={phoneNumber}
                     onChange={(value) => setPhoneNumber(value || "")}
                     defaultCountry="IN"
-                    className="input" // Basic styling, can be improved
+                    className="input"
                     disabled={isLoading}
                   />
+                </div>
+                {/* Location capture — improves nearby doctor search accuracy */}
+                <div className="space-y-2">
+                  <Label>Location (Optional)</Label>
+                  <button
+                    type="button"
+                    onClick={handleGetLocation}
+                    disabled={isLoading || isGettingLocation}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-md border border-input bg-background text-sm hover:bg-muted transition-colors disabled:opacity-50"
+                  >
+                    {isGettingLocation ? (
+                      <span>Detecting location...</span>
+                    ) : location ? (
+                      <span className="text-green-600 font-medium">✓ Location captured</span>
+                    ) : (
+                      <span>📍 Use my location for better doctor search</span>
+                    )}
+                  </button>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="signup-password">Password</Label>
@@ -457,39 +468,7 @@ const AuthModal = ({ isOpen, setIsOpen, message, defaultTab = "signin" }: AuthMo
                 {/* Password strength indicator */}
                 {password && <PasswordStrengthIndicator password={password} />}
                 <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Sending OTP..." : "Get OTP"}
-                </Button>
-              </form>
-            )}
-
-            {signupStep === "otp" && (
-              <form
-                onSubmit={handleVerifySignup}
-                className="space-y-6 flex flex-col items-center"
-              >
-                <Label htmlFor="otp-input">Enter OTP</Label>
-                <p className="text-sm text-muted-foreground">
-                  An OTP has been sent to {phoneNumber}.
-                </p>
-                <InputOTP maxLength={6} value={otp} onChange={setOtp}>
-                  <InputOTPGroup>
-                    <InputOTPSlot index={0} />
-                    <InputOTPSlot index={1} />
-                    <InputOTPSlot index={2} />
-                    <InputOTPSlot index={3} />
-                    <InputOTPSlot index={4} />
-                    <InputOTPSlot index={5} />
-                  </InputOTPGroup>
-                </InputOTP>
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Verifying..." : "Verify & Sign Up"}
-                </Button>
-                <Button
-                  variant="link"
-                  size="sm"
-                  onClick={() => setSignupStep("details")}
-                >
-                  Back to details
+                  {isLoading ? "Creating account..." : "Create Account"}
                 </Button>
               </form>
             )}

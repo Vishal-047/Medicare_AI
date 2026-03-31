@@ -1,5 +1,6 @@
 "use client"
 import { useState, useCallback } from "react"
+import { jsPDF } from "jspdf"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -17,7 +18,6 @@ import {
   XCircle,
   Loader2,
   X,
-  ArrowRight,
   Plus,
   FileText,
   Image as ImageIcon,
@@ -25,6 +25,7 @@ import {
   Lightbulb,
   List,
   FlaskConical,
+  Download,
 } from "lucide-react"
 import { useSession } from "next-auth/react"
 import AuthModal from "@/components/AuthModal"
@@ -244,6 +245,113 @@ export default function AIReportAnalyzer() {
     setFile(null)
     setAnalysisResult(null)
     setError(null)
+  }
+
+  const handleDownloadPDF = () => {
+    if (!analysisResult) return
+    const doc = new jsPDF()
+    const pageWidth = doc.internal.pageSize.getWidth()
+    const margin = 15
+    const contentWidth = pageWidth - margin * 2
+    let y = 20
+
+    // Title
+    doc.setFontSize(20)
+    doc.setFont("helvetica", "bold")
+    doc.setTextColor(30, 64, 175) // blue-800
+    doc.text("MediCare AI — Medical Report Analysis", margin, y)
+    y += 8
+
+    // Date
+    doc.setFontSize(9)
+    doc.setFont("helvetica", "normal")
+    doc.setTextColor(100, 100, 100)
+    doc.text(`Generated on ${new Date().toLocaleDateString("en-IN", { dateStyle: "long" })}`, margin, y)
+    y += 10
+
+    // Divider
+    doc.setDrawColor(200, 210, 255)
+    doc.line(margin, y, pageWidth - margin, y)
+    y += 8
+
+    // Summary
+    doc.setFontSize(13)
+    doc.setFont("helvetica", "bold")
+    doc.setTextColor(30, 30, 30)
+    doc.text("Summary", margin, y)
+    y += 6
+    doc.setFontSize(10)
+    doc.setFont("helvetica", "normal")
+    doc.setTextColor(60, 60, 60)
+    const summaryLines = doc.splitTextToSize(analysisResult.summary, contentWidth)
+    doc.text(summaryLines, margin, y)
+    y += summaryLines.length * 5 + 10
+
+    // Key Findings
+    doc.setFontSize(13)
+    doc.setFont("helvetica", "bold")
+    doc.setTextColor(30, 30, 30)
+    doc.text("Key Findings", margin, y)
+    y += 7
+
+    analysisResult.keyFindings.forEach((f) => {
+      if (y > 265) { doc.addPage(); y = 20 }
+      // Status colour
+      const statusColor: Record<string, [number, number, number]> = {
+        NORMAL: [22, 163, 74],
+        LOW: [220, 38, 38],
+        HIGH: [220, 38, 38],
+        BORDERLINE: [202, 138, 4],
+      }
+      const [r, g, b] = statusColor[f.status] ?? [60, 60, 60]
+      doc.setFontSize(10)
+      doc.setFont("helvetica", "bold")
+      doc.setTextColor(30, 30, 30)
+      doc.text(`${f.label}: `, margin, y)
+      const labelWidth = doc.getTextWidth(`${f.label}: `)
+      doc.setFont("helvetica", "normal")
+      doc.setTextColor(r, g, b)
+      doc.text(`${f.value}  [${f.status}]`, margin + labelWidth, y)
+      y += 5
+      doc.setTextColor(80, 80, 80)
+      const expLines = doc.splitTextToSize(f.explanation, contentWidth - 5)
+      doc.text(expLines, margin + 3, y)
+      y += expLines.length * 4.5 + 4
+    })
+
+    y += 4
+    // Next Steps
+    if (y > 250) { doc.addPage(); y = 20 }
+    doc.setFontSize(13)
+    doc.setFont("helvetica", "bold")
+    doc.setTextColor(30, 30, 30)
+    doc.text("Recommended Next Steps", margin, y)
+    y += 7
+    doc.setFontSize(10)
+    doc.setFont("helvetica", "normal")
+    doc.setTextColor(60, 60, 60)
+    analysisResult.nextSteps.forEach((step, i) => {
+      if (y > 270) { doc.addPage(); y = 20 }
+      const stepLines = doc.splitTextToSize(`${i + 1}. ${step}`, contentWidth)
+      doc.text(stepLines, margin, y)
+      y += stepLines.length * 5 + 2
+    })
+
+    // Footer
+    const totalPages = doc.getNumberOfPages()
+    for (let p = 1; p <= totalPages; p++) {
+      doc.setPage(p)
+      doc.setFontSize(8)
+      doc.setTextColor(150, 150, 150)
+      doc.text(
+        "This report is for informational purposes only and is not a substitute for professional medical advice.",
+        margin,
+        doc.internal.pageSize.getHeight() - 10
+      )
+    }
+
+    doc.save(`MediCare-AI-Analysis-${Date.now()}.pdf`)
+    toast.success("PDF downloaded successfully!")
   }
 
   return (
@@ -467,7 +575,7 @@ export default function AIReportAnalyzer() {
                         </label>
                       </div>
                     </div>
-                    <div className="mt-6 flex justify-center space-x-4">
+                    <div className="mt-6 flex flex-wrap justify-center gap-3">
                       <Button onClick={handleSaveRecord} disabled={isSaving}>
                         {isSaving ? (
                           <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -475,6 +583,15 @@ export default function AIReportAnalyzer() {
                           <Plus className="w-4 h-4 mr-2" />
                         )}
                         Save to My Records
+                      </Button>
+                      {/* PDF Download — jsPDF is already installed */}
+                      <Button
+                        variant="outline"
+                        onClick={handleDownloadPDF}
+                        className="border-blue-300 text-blue-700 hover:bg-blue-50 dark:border-blue-700 dark:text-blue-400"
+                      >
+                        <Download className="w-4 h-4 mr-2" />
+                        Download PDF Report
                       </Button>
                       {file && analysisResult?.originalReportUrl && (
                         <Button variant="secondary" asChild>

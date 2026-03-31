@@ -19,6 +19,7 @@ import {
   AlertTriangle,
   ListChecks,
   Pill,
+  Lock,
 } from "lucide-react";
 import {
   Select,
@@ -38,6 +39,8 @@ import { cn } from "@/lib/utils";
 import Header from "@/components/Header";
 import { toast } from "sonner";
 import jsPDF from "jspdf";
+import { useSession } from "next-auth/react";
+import AuthModal from "@/components/AuthModal";
 
 // SpeechRecognition type definitions
 interface SpeechRecognitionResultList {
@@ -186,6 +189,9 @@ const ChatMessage = ({ msg }: { msg: Message }) => {
 // =================================================================================
 
 const SpeechAnalysisPage = () => {
+  const { status } = useSession();
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [conversation, setConversation] = useState<Message[]>([
@@ -383,6 +389,74 @@ const SpeechAnalysisPage = () => {
 
     return { conditions, flags };
   }, [conversation]);
+
+  // ── Auth guard: show sign-in prompt if not logged in ─────────────────────
+  if (status === "unauthenticated") {
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-foreground">
+        <GridBackground />
+        <Header />
+        <main className="max-w-7xl mx-auto px-4 py-24 flex items-center justify-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Card className="max-w-md w-full text-center p-8 bg-background/90 backdrop-blur-md border shadow-2xl">
+              <div className="flex justify-center mb-6">
+                <div className="relative">
+                  <div className="w-20 h-20 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                    <Mic className="w-10 h-10 text-blue-600" />
+                  </div>
+                  <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center border-2 border-background">
+                    <Lock className="w-3.5 h-3.5 text-amber-600" />
+                  </div>
+                </div>
+              </div>
+              <h2 className="text-2xl font-bold text-foreground mb-2">Sign In Required</h2>
+              <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
+                AI Voice Diagnosis is a personalised feature. Please sign in or
+                create an account to get started.
+              </p>
+              <Button
+                className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white shadow-lg shadow-blue-600/30"
+                size="lg"
+                onClick={() => setIsAuthOpen(true)}
+              >
+                Sign In to Continue
+              </Button>
+              <p className="text-xs text-muted-foreground mt-4">
+                Don&#39;t have an account?{" "}
+                <button
+                  className="text-blue-600 font-medium hover:underline"
+                  onClick={() => setIsAuthOpen(true)}
+                >
+                  Create one for free
+                </button>
+              </p>
+            </Card>
+          </motion.div>
+        </main>
+        <AuthModal isOpen={isAuthOpen} setIsOpen={setIsAuthOpen} defaultTab="signin" />
+      </div>
+    );
+  }
+
+  // Show a minimal loading skeleton while session is resolving
+  if (status === "loading") {
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+        <GridBackground />
+        <Header />
+        <div className="flex items-center justify-center h-[80vh]">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/30 animate-pulse" />
+            <div className="h-4 w-40 bg-muted rounded animate-pulse" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-foreground">
