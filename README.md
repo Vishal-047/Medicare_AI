@@ -65,7 +65,86 @@ Check out our Next.js deployment documentation for more details.
 
 Then open `http://localhost:3000` in your browser.
 
-For a more detailed explanation of the internal flows and architecture, see `workflow.md`.
+For a more detailed explanation of the internal flows and architecture, see `workflow.md` and `website_workflow.md`.
+
+## 1. High-Level Architecture
+
+The platform follows a modern full-stack architecture powered by Next.js, with the frontend and backend tightly integrated alongside various external services.
+
+```mermaid
+graph LR
+    subgraph Frontend [Next.js App Router]
+        UI[React + Tailwind UI]
+        Forms[User Inputs & File Uploads]
+    end
+    
+    subgraph Backend [Next.js API Routes]
+        Auth[NextAuth / Auth API]
+        AI_Logic[Symptom / AI Analysis]
+        OCR_Logic[OCR / Report Processing]
+        Billing[Stripe Integration]
+    end
+    
+    subgraph Services
+        Gemini[Google Gemini AI]
+        OCR[Poppler/Tesseract]
+        Cloud[UploadThing]
+        Stripe[Stripe gateway]
+    end
+    
+    subgraph Storage
+        DB[(MongoDB via Mongoose)]
+    end
+
+    UI --> Forms
+    Forms --> Auth
+    Forms --> AI_Logic
+    Forms --> OCR_Logic
+    Forms --> Billing
+    
+    Auth --> DB
+    AI_Logic --> Gemini
+    AI_Logic --> DB
+    OCR_Logic --> Cloud
+    OCR_Logic --> OCR
+    OCR --> Gemini
+    OCR_Logic --> DB
+    Billing --> Stripe
+```
+
+## 2. Platform User Journeys
+
+The website primarily caters to **Patients**, **Doctors**, and **Admins**. Here is how users navigate through the primary features.
+
+```mermaid
+graph TD
+    A[Landing / Homepage] --> B{User Role}
+    
+    %% Patient Journey
+    B -->|Patient| C(Patient Signup / Login)
+    C --> D[Patient Dashboard]
+    
+    D --> E[Symptom Analysis \n AI Chat]
+    D --> F[Medical Report \n PDF/IMG Upload]
+    D --> G[Find Doctors \n Search Directory]
+    D --> H[Medical Records \n Viewer]
+    D --> I[Premium Checkout \n Stripe Payment]
+    
+    %% AI Flow
+    E -.-> Z((Google Gemini AI))
+    F -.-> Y{Poppler/Tesseract OCR} -.-> Z((Google Gemini AI))
+    
+    %% Doctor Journey
+    B -->|Doctor| J(Doctor Application Form)
+    J --> K{Admin Approval Queue}
+    K -->|Approved| L[Doctor Dashboard / Profile]
+    
+    %% Admin Journey
+    B -->|Admin| M(Admin Verification Login)
+    M --> N[Admin Dashboard]
+    N --> K
+    N --> O[User & System Metrics]
+```
 
 ## Backend Architecture
 
