@@ -16,25 +16,47 @@
 # next.js
 /.next/
 /out/
+/.vercel/output/
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store
+Thumbs.db
 *.pem
+.cph-ng/
 
 # debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
 
 # env files (can opt-in for committing if needed)
 .env*
 
 # vercel
 .vercel
+
+# local uploads / generated private files
+/private_uploads/
+/uploads/
+/tmp/
+/temp/
+
+# editor / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# package manager
+.npm/
+.pnpm-store/
 
 # typescript
 *.tsbuildinfo
